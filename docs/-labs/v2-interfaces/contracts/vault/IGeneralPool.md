@@ -1,0 +1,207 @@
+# IGeneralPool
+
+
+
+
+
+
+
+*IPools with the General specialization setting should implement this interface. This is called by the Vault when a user calls `IVault.swap` or `IVault.batchSwap` to swap with this Pool. Returns the number of tokens the Pool will grant to the user in a &#39;given in&#39; swap, or that the user will grant to the pool in a &#39;given out&#39; swap. This can often be implemented by a `view` function, since many pricing algorithms don&#39;t need to track state changes in swaps. However, contracts implementing this in non-view functions should check that the caller is indeed the Vault.*
+
+## Methods
+
+### getPoolId
+
+```solidity
+function getPoolId() external view returns (bytes32)
+```
+
+
+
+*Returns this Pool&#39;s ID, used when interacting with the Vault (to e.g. join the Pool or swap with it).*
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | bytes32 | undefined |
+
+### getScalingFactors
+
+```solidity
+function getScalingFactors() external view returns (uint256[])
+```
+
+
+
+*Returns the scaling factors of each of the Pool&#39;s tokens. This is an implementation detail that is typically not relevant for outside parties, but which might be useful for some types of Pools.*
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256[] | undefined |
+
+### getSwapFeePercentage
+
+```solidity
+function getSwapFeePercentage() external view returns (uint256)
+```
+
+
+
+*Returns the current swap fee percentage as a 18 decimal fixed point number, so e.g. 1e17 corresponds to a 10% swap fee.*
+
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| _0 | uint256 | undefined |
+
+### onExitPool
+
+```solidity
+function onExitPool(bytes32 poolId, address sender, address recipient, uint256[] balances, uint256 lastChangeBlock, uint256 protocolSwapFeePercentage, bytes userData) external nonpayable returns (uint256[] amountsOut, uint256[] dueProtocolFeeAmounts)
+```
+
+
+
+*Called by the Vault when a user calls `IVault.exitPool` to remove liquidity from this Pool. Returns how many tokens the Vault should deduct from the Pool&#39;s balances, as well as the amount of protocol fees the Pool owes to the Vault. The Vault will then take tokens from the Pool&#39;s balances and send them to `recipient`, as well as collect the reported amount in protocol fees, which the Pool should calculate based on `protocolSwapFeePercentage`. Protocol fees are charged on exit events to guarantee that users exiting the Pool have paid their share. `sender` is the account performing the exit (typically the pool shareholder), and `recipient` is the account to which the Vault will send the proceeds. `balances` contains the total token balances for each token the Pool registered in the Vault, in the same order that `IVault.getPoolTokens` would return. `lastChangeBlock` is the last block in which *any* of the Pool&#39;s registered tokens last changed its total balance. `userData` contains any pool-specific instructions needed to perform the calculations, such as the type of exit (e.g., proportional given an amount of pool shares, single-asset, multi-asset, etc.) Contracts implementing this function should check that the caller is indeed the Vault before performing any state-changing operations, such as burning pool shares.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| poolId | bytes32 | undefined |
+| sender | address | undefined |
+| recipient | address | undefined |
+| balances | uint256[] | undefined |
+| lastChangeBlock | uint256 | undefined |
+| protocolSwapFeePercentage | uint256 | undefined |
+| userData | bytes | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| amountsOut | uint256[] | undefined |
+| dueProtocolFeeAmounts | uint256[] | undefined |
+
+### onJoinPool
+
+```solidity
+function onJoinPool(bytes32 poolId, address sender, address recipient, uint256[] balances, uint256 lastChangeBlock, uint256 protocolSwapFeePercentage, bytes userData) external nonpayable returns (uint256[] amountsIn, uint256[] dueProtocolFeeAmounts)
+```
+
+
+
+*Called by the Vault when a user calls `IVault.joinPool` to add liquidity to this Pool. Returns how many of each registered token the user should provide, as well as the amount of protocol fees the Pool owes to the Vault. The Vault will then take tokens from `sender` and add them to the Pool&#39;s balances, as well as collect the reported amount in protocol fees, which the pool should calculate based on `protocolSwapFeePercentage`. Protocol fees are reported and charged on join events so that the Pool is free of debt whenever new users join. `sender` is the account performing the join (from which tokens will be withdrawn), and `recipient` is the account designated to receive any benefits (typically pool shares). `balances` contains the total balances for each token the Pool registered in the Vault, in the same order that `IVault.getPoolTokens` would return. `lastChangeBlock` is the last block in which *any* of the Pool&#39;s registered tokens last changed its total balance. `userData` contains any pool-specific instructions needed to perform the calculations, such as the type of join (e.g., proportional given an amount of pool shares, single-asset, multi-asset, etc.) Contracts implementing this function should check that the caller is indeed the Vault before performing any state-changing operations, such as minting pool shares.*
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| poolId | bytes32 | undefined |
+| sender | address | undefined |
+| recipient | address | undefined |
+| balances | uint256[] | undefined |
+| lastChangeBlock | uint256 | undefined |
+| protocolSwapFeePercentage | uint256 | undefined |
+| userData | bytes | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| amountsIn | uint256[] | undefined |
+| dueProtocolFeeAmounts | uint256[] | undefined |
+
+### onSwap
+
+```solidity
+function onSwap(IPoolSwapStructs.SwapRequest swapRequest, uint256[] balances, uint256 indexIn, uint256 indexOut) external nonpayable returns (uint256 amount)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| swapRequest | IPoolSwapStructs.SwapRequest | undefined |
+| balances | uint256[] | undefined |
+| indexIn | uint256 | undefined |
+| indexOut | uint256 | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| amount | uint256 | undefined |
+
+### queryExit
+
+```solidity
+function queryExit(bytes32 poolId, address sender, address recipient, uint256[] balances, uint256 lastChangeBlock, uint256 protocolSwapFeePercentage, bytes userData) external nonpayable returns (uint256 bptIn, uint256[] amountsOut)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| poolId | bytes32 | undefined |
+| sender | address | undefined |
+| recipient | address | undefined |
+| balances | uint256[] | undefined |
+| lastChangeBlock | uint256 | undefined |
+| protocolSwapFeePercentage | uint256 | undefined |
+| userData | bytes | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| bptIn | uint256 | undefined |
+| amountsOut | uint256[] | undefined |
+
+### queryJoin
+
+```solidity
+function queryJoin(bytes32 poolId, address sender, address recipient, uint256[] balances, uint256 lastChangeBlock, uint256 protocolSwapFeePercentage, bytes userData) external nonpayable returns (uint256 bptOut, uint256[] amountsIn)
+```
+
+
+
+
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| poolId | bytes32 | undefined |
+| sender | address | undefined |
+| recipient | address | undefined |
+| balances | uint256[] | undefined |
+| lastChangeBlock | uint256 | undefined |
+| protocolSwapFeePercentage | uint256 | undefined |
+| userData | bytes | undefined |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| bptOut | uint256 | undefined |
+| amountsIn | uint256[] | undefined |
+
+
+
+

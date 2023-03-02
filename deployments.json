@@ -1,0 +1,55 @@
+{
+    "421613": [
+        {
+            "name": "Authorizer",
+            "address": "0xb76D10a61bF868FF9599d3d4a6d6Cc9E2831cC5e",
+            "meta": {
+                "constructorArguments": [
+                    "0x40282d3Cf4890D9806BC1853e97a59C93D813653"
+                ]
+            }
+        },
+        {
+            "name": "Vault",
+            "address": "0x2D9e85088eCbb03FBA4f880274aD808663217092",
+            "meta": {
+                "constructorArguments": [
+                    "0xb76D10a61bF868FF9599d3d4a6d6Cc9E2831cC5e",
+                    "0xd428690148436dA9c7422698eEe15F51C8cec871",
+                    0,
+                    0
+                ]
+            }
+        },
+        {
+            "name": "LiquidityBootstrappingPool",
+            "address": "0x1f17D3154E3327f48eDBcfE025e47A04078Ee42d",
+            "meta": {
+                "constructorArguments": [
+                    "0x2D9e85088eCbb03FBA4f880274aD808663217092",
+                    "Tapioca LBP",
+                    "tLBP",
+                    [
+                        "0x31dA039c8Cf6eDC95fAFECb7B3E70a308128b7E0",
+                        "0xd428690148436dA9c7422698eEe15F51C8cec871"
+                    ],
+                    [
+                        {
+                            "type": "BigNumber",
+                            "hex": "0x02c68af0bb140000"
+                        },
+                        {
+                            "type": "BigNumber",
+                            "hex": "0x0b1a2bc2ec500000"
+                        }
+                    ],
+                    "100000000000000",
+                    0,
+                    0,
+                    "0x40282d3Cf4890D9806BC1853e97a59C93D813653",
+                    false
+                ]
+            }
+        }
+    ]
+}
