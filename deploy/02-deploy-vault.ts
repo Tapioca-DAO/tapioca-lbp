@@ -28,7 +28,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const fileContent = `module.exports=${JSON.stringify(vaultArgs)}`;
     fs.writeFileSync('./deploy/__vault-arguments.js', fileContent, {flag: 'w'});
 
-    await verify(hre, 'Vault', [vaultArgs]);
     const deployedVault = await deployments.get('Vault');
 
     contracts.push({

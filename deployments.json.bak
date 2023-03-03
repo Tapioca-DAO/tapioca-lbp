@@ -50,6 +50,27 @@
                     false
                 ]
             }
+        },
+        {
+            "name": "Authorizer",
+            "address": "0xAef6dcab06B99A45E903DB20DFF4A6596831053A",
+            "meta": {
+                "constructorArguments": [
+                    "0x40282d3Cf4890D9806BC1853e97a59C93D813653"
+                ]
+            }
+        },
+        {
+            "name": "Vault",
+            "address": "0xB40D516c68Df03f33c787baDafb671bd45FE694D",
+            "meta": {
+                "constructorArguments": [
+                    "0xAef6dcab06B99A45E903DB20DFF4A6596831053A",
+                    "0xd428690148436dA9c7422698eEe15F51C8cec871",
+                    "0",
+                    "0"
+                ]
+            }
         }
     ]
 }

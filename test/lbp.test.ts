@@ -691,7 +691,7 @@ describe.only('LBP', function () {
                 sortedTokens.addresses[1],
             );
 
-            const startBalances = [fp(5000000), fp(357000)]; //5M TAP, 357k USDC
+            const startBalances = [fp(5000000), fp(359000)]; //5M TAP, 359k USDC
             await tap.connect(owner).mint(owner.address, startBalances[0]);
             await usdc.connect(owner).mint(owner.address, startBalances[1]);
 
@@ -766,28 +766,130 @@ describe.only('LBP', function () {
                 expect(balanceAfter.eq(0)).to.be.true;
             };
 
-            const swapFee = await lbp.getSwapFeePercentage();
-            //simulation with: 1.16M unsold TAP; 180k USDC per lot; 72 lots
-            const buyAmount = fp(50000);
-            for (var i = 0; i < 216; i++) {
-                await buy(buyAmount);
-                await advanceTime(20 * MINUTE); //each hour; 3 days in total
+            const queryGivenOut = async (_amount: BigNumber) => {
+                const singleSwapData = {
+                    poolId: await lbp.getPoolId(),
+                    kind: 1, //GIVEN OUT
+                    assetIn: tap.address,
+                    assetOut: usdc.address,
+                    amount: _amount,
+                    userData: '0x',
+                };
+                const fundManagementData = {
+                    sender: other.address,
+                    recipient: other.address,
+                    fromInternalBalance: false,
+                    toInternalBalance: false,
+                };
+
+                await usdc.approve(lbpVault.address, MAX_UINT256);
+                const amountOut = await lbpVault
+                    .connect(other)
+                    .callStatic.swap(
+                        singleSwapData,
+                        fundManagementData,
+                        singleSwapData.kind == 0 ? 0 : MAX_UINT256,
+                        MAX_UINT256,
+                    );
+
+                return amountOut;
+            };
+
+            const queryUsdcAmount = async () => {
+                const desiredTapAmount = 26767;
+
+                const balance1 = await tap.balanceOf(lbpVault.address);
+                const balance2 = await usdc.balanceOf(lbpVault.address);
+
+                const normalizedWeights = await lbp.getNormalizedWeights();
+                const weight1 = normalizedWeights[0];
+                const weight2 = normalizedWeights[1];
+
+                const price1 = balance1 / weight1;
+                const price2 = balance2 / weight2;
+
+                const price = price2 / price1;
+
+                const amount = desiredTapAmount * price;
+                return fp(parseInt(amount.toString()));
+            };
+
+            for (var i = 0; i < 72; i++) {
+                const endNow = await currentTimestamp();
+                if (endNow >= endTime) continue;
+                for (var j = 0; j < 2; j++) {
+                    let buyAmount = await queryUsdcAmount();
+                    await buy(buyAmount);
+                }
+                await advanceTime(HOUR);
             }
 
-            const tapVaultBalance = ethers.utils.formatEther(
-                await tap.balanceOf(lbpVault.address),
+            await lbp.connect(owner).setSwapEnabled(false);
+
+            let tapVaultBalance = await tap.balanceOf(lbpVault.address);
+            let usdcVaultBalance = await usdc.balanceOf(lbpVault.address);
+            const tapOtherBalance = await tap.balanceOf(other.address);
+
+            console.log(
+                `vault TAP balance at the end of the LBP  ${tapVaultBalance}`,
             );
-            const usdcVaultBalance = ethers.utils.formatEther(
-                await usdc.balanceOf(lbpVault.address),
+            console.log(
+                `vault USDC balance at the end of the LBP ${usdcVaultBalance}`,
+            );
+            console.log(
+                `user TAP balance at the end of the LBP   ${tapOtherBalance}`,
             );
 
-            console.log(`vault TAP balance at the end of the LBP  ${tapVaultBalance}`);
-            console.log(`vault USDC balance at the end of the LBP ${usdcVaultBalance}`);
+            expect(usdcVaultBalance.gt(fp(11000000))).to.be.true;
+            expect(tapVaultBalance.lt(fp(1500000))).to.be.true;
+            expect(tapOtherBalance.gt(fp(3000000))).to.be.true;
 
-            const tapOtherBalance = ethers.utils.formatEther(
-                await tap.balanceOf(other.address),
+            const eoa1 = new ethers.Wallet(
+                ethers.Wallet.createRandom().privateKey,
+                ethers.provider,
             );
-            console.log(`user TAP balance at the end of the LBP   ${tapOtherBalance}`);
+
+            let usdcOwnerBalancer = await usdc.balanceOf(owner.address);
+            let tapOwnerBalancer = await tap.balanceOf(owner.address);
+            if (usdcOwnerBalancer.gt(0))
+                await usdc.transfer(eoa1.address, usdcOwnerBalancer);
+            if (tapOtherBalance.gt(0))
+                await tap.transfer(eoa1.address, tapOwnerBalancer);
+
+            usdcOwnerBalancer = await usdc.balanceOf(owner.address);
+            tapOwnerBalancer = await tap.balanceOf(owner.address);
+            expect(usdcOwnerBalancer.eq(0)).to.be.true;
+            expect(tapOwnerBalancer.eq(0)).to.be.true;
+
+            let ownerPoolBalance = await lbp.balanceOf(owner.address);
+            console.log(`ownerPoolBalance ${ownerPoolBalance}`);
+            await lbp.connect(owner).approve(lbpVault.address, MAX_UINT256);
+            await lbpVault
+                .connect(owner)
+                .exitPool(await lbp.getPoolId(), owner.address, owner.address, {
+                    assets: [tap.address, usdc.address],
+                    minAmountsOut: [
+                        tapVaultBalance.sub(1e8),
+                        usdcVaultBalance.sub(1e8),
+                    ],
+                    toInternalBalance: false,
+                    userData: WeightedPoolEncoder.exitBPTInForExactTokensOut(
+                        [tapVaultBalance.sub(1e8), usdcVaultBalance.sub(1e8)],
+                        ownerPoolBalance,
+                    ),
+                });
+
+            tapOwnerBalancer = await tap.balanceOf(owner.address);
+            usdcOwnerBalancer = await usdc.balanceOf(owner.address);
+
+            tapVaultBalance = await tap.balanceOf(lbpVault.address);
+            usdcVaultBalance = await usdc.balanceOf(lbpVault.address);
+
+            console.log(`tapOwnerBalancer  ${tapOwnerBalancer}`);
+            console.log(`usdcOwnerBalancer ${usdcOwnerBalancer}`);
+
+            console.log(`tapVaultBalance  ${tapVaultBalance}`);
+            console.log(`usdcVaultBalance ${usdcVaultBalance}`);
         });
     });
 });
