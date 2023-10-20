@@ -29,6 +29,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     fs.writeFileSync('./deploy/__vault-arguments.js', fileContent, {flag: 'w'});
 
     const deployedVault = await deployments.get('Vault');
+    await verify(hre, 'Vault', vaultArgs);
 
     contracts.push({
         name: 'Vault',

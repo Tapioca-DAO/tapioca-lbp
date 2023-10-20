@@ -831,13 +831,19 @@ describe.only('LBP', function () {
             const tapOtherBalance = await tap.balanceOf(other.address);
 
             console.log(
-                `vault TAP balance at the end of the LBP  ${tapVaultBalance}`,
+                `vault TAP balance at the end of the LBP  ${ethers.utils.formatEther(
+                    tapVaultBalance,
+                )}`,
             );
             console.log(
-                `vault USDC balance at the end of the LBP ${usdcVaultBalance}`,
+                `vault USDC balance at the end of the LBP ${ethers.utils.formatEther(
+                    usdcVaultBalance,
+                )}`,
             );
             console.log(
-                `user TAP balance at the end of the LBP   ${tapOtherBalance}`,
+                `user TAP balance at the end of the LBP   ${ethers.utils.formatEther(
+                    tapOtherBalance,
+                )}`,
             );
 
             expect(usdcVaultBalance.gt(fp(11000000))).to.be.true;
@@ -862,7 +868,11 @@ describe.only('LBP', function () {
             expect(tapOwnerBalancer.eq(0)).to.be.true;
 
             let ownerPoolBalance = await lbp.balanceOf(owner.address);
-            console.log(`ownerPoolBalance ${ownerPoolBalance}`);
+            console.log(
+                `ownerPoolBalance ${ethers.utils.formatEther(
+                    ownerPoolBalance,
+                )}`,
+            );
             await lbp.connect(owner).approve(lbpVault.address, MAX_UINT256);
             await lbpVault
                 .connect(owner)
@@ -885,11 +895,25 @@ describe.only('LBP', function () {
             tapVaultBalance = await tap.balanceOf(lbpVault.address);
             usdcVaultBalance = await usdc.balanceOf(lbpVault.address);
 
-            console.log(`tapOwnerBalancer  ${tapOwnerBalancer}`);
-            console.log(`usdcOwnerBalancer ${usdcOwnerBalancer}`);
+            console.log(
+                `tapOwnerBalancer  ${ethers.utils.formatEther(
+                    tapOwnerBalancer,
+                )}`,
+            );
+            console.log(
+                `usdcOwnerBalancer ${ethers.utils.formatEther(
+                    usdcOwnerBalancer,
+                )}`,
+            );
 
-            console.log(`tapVaultBalance  ${tapVaultBalance}`);
-            console.log(`usdcVaultBalance ${usdcVaultBalance}`);
+            console.log(
+                `tapVaultBalance  ${ethers.utils.formatEther(tapVaultBalance)}`,
+            );
+            console.log(
+                `usdcVaultBalance ${ethers.utils.formatEther(
+                    usdcVaultBalance,
+                )}`,
+            );
         });
     });
 });

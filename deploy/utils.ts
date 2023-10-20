@@ -20,17 +20,19 @@ let supportedChains: {[key: string]: any} = SDK.API.utils
 export const constants: {[key: string]: any} = {
     '421613': {
         ...supportedChains['arbitrum_goerli'],
-        wethAddress: '0xd428690148436dA9c7422698eEe15F51C8cec871',
-        tapAddress: '0x31dA039c8Cf6eDC95fAFECb7B3E70a308128b7E0',
+        wethAddress: '0x00AAc35Ff4f40FfA2E623D3E341762E75D47927b',
+        tapAddress: '0x97f3E88DA4d26a67cb8415690E07d082652d3841',
         lbp: {
             name: 'Tapioca LBP',
             symbol: 'tLBP',
             tokens: [
-                `0xd428690148436dA9c7422698eEe15F51C8cec871`, //weth
-                `0x31dA039c8Cf6eDC95fAFECb7B3E70a308128b7E0`, //tap
+                `0x00AAc35Ff4f40FfA2E623D3E341762E75D47927b`, //weth
+                `0x97f3E88DA4d26a67cb8415690E07d082652d3841`, //tap
             ],
             weights: [fp(0.2), fp(0.8)],
+            endWeights: [fp(0.8), fp(0.2)],
             swapFee: fp(0.0001),
+            duration: 100 * 86400, //TODO: update with the real value
         },
     },
 };
