@@ -15,6 +15,7 @@ import overrideQueryFunctions from './helpers/plugins/overrideQueryFunctions';
 import SDK from 'tapioca-sdk';
 
 task(TASK_COMPILE).setAction(overrideQueryFunctions);
+import {fillLbptest__task} from './tasks/setups/01-setupLbp-test';
 
 dotenv.config();
 
@@ -89,3 +90,8 @@ export default {
         apiKey: process.env.ETHERSCAN_KEY,
     },
 };
+
+task('fillLbptest', 'setup mock lbp', fillLbptest__task)
+    .addParam('lbp')
+    .addParam('vault')
+    .addParam('owner');

@@ -1,0 +1,9 @@
+import '@nomiclabs/hardhat-ethers';
+import {task} from 'hardhat/config';
+
+import {fillLbptest__task} from './tasks/setups/01-setupLbp-test';
+
+task('fillLbptest', 'setup mock lbp', fillLbptest__task)
+    .addParam('lbp')
+    .addParam('vault')
+    .addParam('owner');

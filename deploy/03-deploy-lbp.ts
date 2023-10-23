@@ -40,6 +40,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         args,
         from: deployer,
     });
+    await verify(hre, 'LiquidityBootstrappingPool', args);
+
     const fileContent = `module.exports=${JSON.stringify(args)}`;
     fs.writeFileSync('./deploy/__lbp-arguments.js', fileContent, {flag: 'w'});
 

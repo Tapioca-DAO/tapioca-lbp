@@ -2,7 +2,7 @@
     "421613": [
         {
             "name": "Authorizer",
-            "address": "0xb76D10a61bF868FF9599d3d4a6d6Cc9E2831cC5e",
+            "address": "0xB9D2537720BaE8e81eB3846ED3022c7dAfDABfD9",
             "meta": {
                 "constructorArguments": [
                     "0x40282d3Cf4890D9806BC1853e97a59C93D813653"
@@ -11,62 +11,11 @@
         },
         {
             "name": "Vault",
-            "address": "0x2D9e85088eCbb03FBA4f880274aD808663217092",
+            "address": "0x762E7626AD75D35F2524085e21E516f7cdDF5138",
             "meta": {
                 "constructorArguments": [
-                    "0xb76D10a61bF868FF9599d3d4a6d6Cc9E2831cC5e",
-                    "0xd428690148436dA9c7422698eEe15F51C8cec871",
-                    0,
-                    0
-                ]
-            }
-        },
-        {
-            "name": "LiquidityBootstrappingPool",
-            "address": "0x1f17D3154E3327f48eDBcfE025e47A04078Ee42d",
-            "meta": {
-                "constructorArguments": [
-                    "0x2D9e85088eCbb03FBA4f880274aD808663217092",
-                    "Tapioca LBP",
-                    "tLBP",
-                    [
-                        "0x31dA039c8Cf6eDC95fAFECb7B3E70a308128b7E0",
-                        "0xd428690148436dA9c7422698eEe15F51C8cec871"
-                    ],
-                    [
-                        {
-                            "type": "BigNumber",
-                            "hex": "0x02c68af0bb140000"
-                        },
-                        {
-                            "type": "BigNumber",
-                            "hex": "0x0b1a2bc2ec500000"
-                        }
-                    ],
-                    "100000000000000",
-                    0,
-                    0,
-                    "0x40282d3Cf4890D9806BC1853e97a59C93D813653",
-                    false
-                ]
-            }
-        },
-        {
-            "name": "Authorizer",
-            "address": "0xAef6dcab06B99A45E903DB20DFF4A6596831053A",
-            "meta": {
-                "constructorArguments": [
-                    "0x40282d3Cf4890D9806BC1853e97a59C93D813653"
-                ]
-            }
-        },
-        {
-            "name": "Vault",
-            "address": "0xB40D516c68Df03f33c787baDafb671bd45FE694D",
-            "meta": {
-                "constructorArguments": [
-                    "0xAef6dcab06B99A45E903DB20DFF4A6596831053A",
-                    "0xd428690148436dA9c7422698eEe15F51C8cec871",
+                    "0xB9D2537720BaE8e81eB3846ED3022c7dAfDABfD9",
+                    "0x00AAc35Ff4f40FfA2E623D3E341762E75D47927b",
                     "0",
                     "0"
                 ]
@@ -74,15 +23,15 @@
         },
         {
             "name": "LiquidityBootstrappingPool",
-            "address": "0x60F01d69B78BCAE6d2301461b60362EC23748048",
+            "address": "0xc1dbd0a8Fe1f449F4dfc02b45e11485Ec305197A",
             "meta": {
                 "constructorArguments": [
-                    "0xB40D516c68Df03f33c787baDafb671bd45FE694D",
+                    "0x762E7626AD75D35F2524085e21E516f7cdDF5138",
                     "Tapioca LBP",
                     "tLBP",
                     [
-                        "0x31dA039c8Cf6eDC95fAFECb7B3E70a308128b7E0",
-                        "0xd428690148436dA9c7422698eEe15F51C8cec871"
+                        "0x00AAc35Ff4f40FfA2E623D3E341762E75D47927b",
+                        "0x97f3E88DA4d26a67cb8415690E07d082652d3841"
                     ],
                     [
                         "200000000000000000",
